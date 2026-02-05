@@ -9,6 +9,8 @@
 
 #include "log.hpp"
 
+namespace imserver{
+
 /// @brief 将Json::Value序列化为字符串
 /// @param src 输入参数：待序列化的 Json::Value 格式数据
 /// @param dest 输出参数：序列化后得到的 std::string 格式字符串
@@ -426,3 +428,7 @@ const std::unordered_set<std::string> ESSearch::_searchClauseTypes={
     "match",
     "terms"
 };
+
+
+
+}

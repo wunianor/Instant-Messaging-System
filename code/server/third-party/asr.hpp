@@ -3,6 +3,10 @@
 #include "aip-cpp-sdk-4.16.7/speech.h"
 #include "log.hpp"
 
+namespace imserver
+{
+
+
 class ASRClient
 {
 public:
@@ -70,3 +74,7 @@ private:
     /// @brief 百度语音识别SDK客户端
     aip::Speech _client;
 };
+
+
+
+}

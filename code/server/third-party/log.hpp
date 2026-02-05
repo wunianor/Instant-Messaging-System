@@ -5,7 +5,7 @@
 #include <spdlog/async.h>
 #include <iostream>
 
-namespace Log{
+namespace imserver{
     /// @brief 全局日志对象
     std::shared_ptr<spdlog::logger> gLogger;
 
@@ -34,9 +34,9 @@ namespace Log{
 
 }
 
-#define LOG_TRACE(format,...) Log::gLogger->trace(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
-#define LOG_DEBUG(format,...) Log::gLogger->debug(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
-#define LOG_INFO(format,...)  Log::gLogger->info (std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
-#define LOG_WARN(format,...)  Log::gLogger->warn (std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
-#define LOG_ERROR(format,...) Log::gLogger->error(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
-#define LOG_FATAL(format,...) Log::gLogger->critical(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);  
+#define LOG_TRACE(format,...) imserver::gLogger->trace(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
+#define LOG_DEBUG(format,...) imserver::gLogger->debug(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
+#define LOG_INFO(format,...)  imserver::gLogger->info (std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
+#define LOG_WARN(format,...)  imserver::gLogger->warn (std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
+#define LOG_ERROR(format,...) imserver::gLogger->error(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);
+#define LOG_FATAL(format,...) imserver::gLogger->critical(std::string("[{}:{}]")+format,__FILE__,__LINE__,##__VA_ARGS__);  

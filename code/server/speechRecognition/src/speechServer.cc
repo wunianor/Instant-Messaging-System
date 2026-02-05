@@ -33,7 +33,7 @@ int main(int argc,char **argv)
     google::ParseCommandLineFlags(&argc, &argv, true);
 
     //初始化全局日志输出器
-    Log::initGlogger(FLAGS_isRelease,FLAGS_file,(spdlog::level::level_enum)FLAGS_level);
+    initGlogger(FLAGS_isRelease,FLAGS_file,(spdlog::level::level_enum)FLAGS_level);
 
     //创建并启动语音识别服务器
     SpeechRecognitionServerBuilder ssb;

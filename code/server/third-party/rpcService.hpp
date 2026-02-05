@@ -6,6 +6,10 @@
 
 #include "log.hpp"
 
+
+namespace imserver
+{
+
 /// @brief RPC服务信道集合类,保存某个RPC服务的所有主机节点的通信信道
 class RPCServiceChannel
 {
@@ -232,3 +236,6 @@ private:
     /// @brief 服务姓名映射服务信道
     std::unordered_map<std::string, std::shared_ptr<RPCServiceChannel>> _serviceNameMapService;
 };
+
+
+}

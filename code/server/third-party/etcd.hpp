@@ -8,6 +8,10 @@
 
 #include "log.hpp"
 
+
+namespace imserver
+{
+
 /// @brief 服务注册类
 class ServiceRegister
 {
@@ -150,3 +154,7 @@ private:
     /// @brief 删除服务(键值对)回调函数
     NotifyCallback_t _delCb;
 };
+
+
+
+}

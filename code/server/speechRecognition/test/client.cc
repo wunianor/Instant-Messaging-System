@@ -29,15 +29,15 @@ using std::endl;
 
 int main()
 {
-    Log::initGlogger(false);
+    imserver::initGlogger(false);
 
-    RPCServiceManager rpcsm;
+    imserver::RPCServiceManager rpcsm;
 
     std::string host="127.0.0.1:2379";
-    ServiceDiscover sd(host,
+    imserver::ServiceDiscover sd(host,
                        "/service",
-                       std::bind(&RPCServiceManager::serviceOnline,&rpcsm,std::placeholders::_1,std::placeholders::_2),
-                       std::bind(&RPCServiceManager::serviceOffline,&rpcsm,std::placeholders::_1,std::placeholders::_2)
+                       std::bind(&imserver::RPCServiceManager::serviceOnline,&rpcsm,std::placeholders::_1,std::placeholders::_2),
+                       std::bind(&imserver::RPCServiceManager::serviceOffline,&rpcsm,std::placeholders::_1,std::placeholders::_2)
                       );
 
 
@@ -49,7 +49,7 @@ int main()
     req->set_request_id("1");
 
     std::string file="../test/test1_16k.pcm";
-    std::string fileContent=ASRClient::getFileContent(file);
+    std::string fileContent=imserver::ASRClient::getFileContent(file);
     req->set_speech_content(fileContent);
 
 

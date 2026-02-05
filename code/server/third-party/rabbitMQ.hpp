@@ -24,6 +24,8 @@
 // //实例化信道对象
 // AMQP::TcpChannel channel(&connection);
 
+namespace imserver
+{
 
 #define DEFAULT_EXCHANGE_TYPE AMQP::ExchangeType::direct
 
@@ -181,3 +183,6 @@ private:
     /// @brief 该RMQ客户端对应的事件循环线程
     std::thread _loopThread;
 };
+
+
+}
