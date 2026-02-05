@@ -13,10 +13,10 @@ class ServiceRegister
 {
 public:
     /// @brief 构造函数
-    /// @param host etcd服务器ip:port
+    /// @param addr etcd服务器ip:port
     /// @param ttl  租约生存时间
-    ServiceRegister(const string &host,int ttl):
-        _client(std::make_shared<etcd::Client>(host)),
+    ServiceRegister(const string &addr,int ttl):
+        _client(std::make_shared<etcd::Client>(addr)),
         _keepAlive(_client->leasekeepalive(ttl).get()),
         _leaseId(_keepAlive->Lease())
     {}
@@ -31,9 +31,10 @@ public:
         if(rsp.is_ok()==false)
         {
             //注册服务失败日志打印
-            LOG_ERROR("注册服务失败");
+            LOG_ERROR("注册{}-{}服务失败",key,value);
             return false;
         }
+        LOG_INFO("注册{}-{}服务成功",key,value);
         return true;
     }
 
@@ -56,15 +57,15 @@ public:
     using NotifyCallback_t = std::function<void(const std::string &,const std::string &)>;
 
     /// @brief 构造函数
-    /// @param host etcd服务器ip:port
+    /// @param addr etcd服务器ip:port
     /// @param baseDir 服务根目录
     /// @param putCb 新增/修改服务回调函数
     /// @param delCb 删除服务回调函数
-    ServiceDiscover(const std::string &host,
+    ServiceDiscover(const std::string &addr,
                     const std::string &baseDir,
                     const NotifyCallback_t &putCb,
                     const NotifyCallback_t &delCb):
-        _client(std::make_shared<etcd::Client>(host)),
+        _client(std::make_shared<etcd::Client>(addr)),
         _watcher(std::make_shared<etcd::Watcher>(*(_client.get()),
                                                    baseDir,
                                                    std::bind(&ServiceDiscover::watcherCallback,this,std::placeholders::_1),
