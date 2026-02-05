@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package imserver;
+
+option cc_generic_services = true;
+
+// 语音识别请求消息定义
+message SpeechRecognitionRequest 
+{
+    string request_id = 1;             //请求ID
+    bytes speech_content = 2;          //语音内容
+    string user_id = 3;       //用户id
+    string session_id = 4;    //会话id
+}
+
+// 语音识别响应消息定义
+message SpeechRecognitionResponse 
+{
+    string request_id = 1;                //响应id
+    bool success = 2;                     //识别是否成功
+    string recognized_text = 3;  //识别成功得到的结果
+    string error_message = 4;    //识别失败信息
+}
+
+// 语音识别rpc服务定义
+service SpeechRecognitionService 
+{
+    rpc RecognizeSpeech (SpeechRecognitionRequest) returns (SpeechRecognitionResponse);
+}
