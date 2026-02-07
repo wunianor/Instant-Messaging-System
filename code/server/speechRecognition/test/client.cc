@@ -32,6 +32,7 @@ int main()
     imserver::initGlogger(false);
 
     imserver::RPCServiceManager rpcsm;
+    rpcsm.followService("/service/SpeechRecognition");
 
     std::string host="127.0.0.1:2379";
     imserver::ServiceDiscover sd(host,
@@ -56,7 +57,7 @@ int main()
     //用于存放响应
     imserver::SpeechRecognitionResponse *rsp=new imserver::SpeechRecognitionResponse();
 
-    rpcsm.followService("/service/SpeechRecognition");
+
     while(1)
     {
         controller->Reset();
