@@ -41,5 +41,6 @@
 *.dwo
 
 
-#build文件夹
+#build,.vscode/文件夹
 build/
+.vscode/

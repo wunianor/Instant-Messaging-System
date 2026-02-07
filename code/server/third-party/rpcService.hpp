@@ -147,11 +147,11 @@ public:
     }
 
     /// @brief 服务主机上线的回调函数
-    /// @param serviceName 服务/主机 名
+    /// @param serviceInstanceName 服务/实例 名
     /// @param host 提供该服务的主机的ip:port
-    void serviceOnline(const std::string &serviceHostName, const std::string &host)
+    void serviceOnline(const std::string &serviceInstanceName, const std::string &host)
     {
-        std::string serviceName=getServiceName(serviceHostName);
+        std::string serviceName=getServiceName(serviceInstanceName);
         std::shared_ptr<RPCServiceChannel> service;
 
         {
@@ -186,11 +186,11 @@ public:
     }
 
     /// @brief 服务主机下线的回调函数
-    /// @param serviceName 服务/主机 名
+    /// @param serviceInstanceName 服务/实例 名
     /// @param host 主机ip:port
-    void serviceOffline(const std::string &serviceHostName, const std::string &host)
+    void serviceOffline(const std::string &serviceInstanceName, const std::string &host)
     {
-        std::string serviceName=getServiceName(serviceHostName);
+        std::string serviceName=getServiceName(serviceInstanceName);
         std::unique_lock<std::mutex> lock(_mutex);
 
         //如果该服务不是受关心的服务,直接返回即可
@@ -212,18 +212,18 @@ public:
 
 private:
     
-    /// @brief 通过 服务/主机 名 获取 服务名
-    /// @param 服务/主机 名
+    /// @brief 通过 服务/实例 名 获取 服务名
+    /// @param serviceInstanceName 服务/实例 名
     /// @return 返回服务名,若服务不存在返回""
-    std::string getServiceName(const std::string &serviceHostName)
+    std::string getServiceName(const std::string &serviceInstanceName)
     {
-        size_t pos=serviceHostName.rfind('/');
+        size_t pos=serviceInstanceName.rfind('/');
         if(pos == std::string::npos)
         {
             return "";
         }
 
-        return serviceHostName.substr(0,pos);
+        return serviceInstanceName.substr(0,pos);
     }
 
 private:
