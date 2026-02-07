@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package imserver;
+
+import "base.proto";
+
+option cc_generic_services = true;
+
+message GetSingleFileRequest 
+{
+    string request_id = 1;      //请求ID
+    string file_id = 2;         //文件ID
+    string user_id = 3;         //用户ID
+    string session_id = 4;      //会话ID
+}
+
+
+message GetSingleFileResponse
+{
+    string request_id = 1;      //响应ID
+    bool success = 2;           //请求是否成功
+    FileDownloadData file_data = 3; //文件数据
+    string error_message = 4;   //错误信息
+}
+
+message GetMultiFileRequest 
+{
+    string request_id = 1;          //请求ID
+    string user_id=2;               //用户ID
+    string session_id=3;            //会话ID
+    repeated string file_id_list=4; //文件ID列表
+}
+
+message GetMultiFileResponse
+{
+    string request_id = 1;              //响应ID
+    bool success = 2;                   //请求是否成功
+    map<string, FileDownloadData> file_data_map = 3; //文件id到文件数据的映射
+    string error_message = 4;           //错误信息
+}
+
+
+message PutSingleFileRequest 
+{
+    string request_id = 1;      //请求ID
+    string user_id = 2;         //用户ID
+    string session_id = 3;      //会话ID
+    FileUploadData file_data = 4; //文件数据
+}
+
+message PutSingleFileResponse
+{
+    string request_id = 1;      //响应ID
+    bool success = 2;           //请求是否成功
+    FileMessageInfo file_info = 3; //文件信息
+    string error_message = 4;   //错误信息
+}
+
+message PutMultiFileRequest 
+{
+    string request_id = 1;          //请求ID
+    string user_id=2;               //用户ID
+    string session_id=3;            //会话ID
+    repeated FileUploadData file_data_list=4; //文件数据列表
+}
+
+message PutMultiFileResponse
+{
+    string request_id = 1;              //响应ID
+    bool success = 2;                   //请求是否成功
+    repeated FileMessageInfo file_info_list = 3; //文件信息列表
+    string error_message = 4;           //错误信息
+}
+
+
+service FileService 
+{
+    rpc GetSingleFile (GetSingleFileRequest) returns (GetSingleFileResponse);
+    rpc GetMultiFile (GetMultiFileRequest) returns (GetMultiFileResponse);
+    rpc PutSingleFile (PutSingleFileRequest) returns (PutSingleFileResponse);
+    rpc PutMultiFile (PutMultiFileRequest) returns (PutMultiFileResponse);
+}
