@@ -46,6 +46,7 @@ public:
             response->set_request_id(request->request_id());
             response->set_success(false);
             response->set_error_message("读取文件"+filePath+"失败!");
+            LOG_ERROR("读取文件{}失败!,请求id:{},用户id:{},文件uuid:{}",filePath,request->request_id(),request->user_id(),request->file_id());
         }
         else
         {
@@ -79,7 +80,7 @@ public:
                 response->set_success(false);
                 response->mutable_file_data_map()->clear();
                 response->set_error_message("读取文件"+filePath+"失败");
-
+                LOG_ERROR("读取文件{}失败!,请求id:{},用户id:{},文件uuid:{}",filePath,request->request_id(),request->user_id(),fileId);
                 return;
             }
 
@@ -110,6 +111,7 @@ public:
             response->set_request_id(request->request_id());
             response->set_success(false);
             response->set_error_message("写入文件"+filePath+"失败");
+            LOG_ERROR("写入文件{}失败!,请求id:{},用户id:{},文件uuid:{}",filePath,request->request_id(),request->user_id(),fileId);
         }
         else 
         {
@@ -143,6 +145,7 @@ public:
                 response->mutable_file_info_list()->Clear();
                 response->set_error_message("写入文件"+filePath+"失败");
 
+                LOG_ERROR("写入文件{}失败!,请求id:{},用户id:{},文件uuid:{}",filePath,request->request_id(),request->user_id(),fileId);
                 return ;
             }
 
