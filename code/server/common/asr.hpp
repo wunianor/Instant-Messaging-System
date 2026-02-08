@@ -1,6 +1,6 @@
 #pragma once
 
-#include "aip-cpp-sdk-4.16.7/speech.h"
+#include "../third-party/aip-cpp-sdk-4.16.7/speech.h"
 #include "log.hpp"
 
 namespace imserver
