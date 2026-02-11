@@ -319,7 +319,7 @@ public:
     {}    
 
     /// @brief 新增查询子句
-    /// @param boolConditionType 条件表达式类型,例如must,should,must_no等
+    /// @param boolConditionType 条件表达式类型,例如must,should,must_not等
     /// @param searchClauseType 搜索子句类型,例如match,terms等
     /// @param key 键
     /// @param value 值

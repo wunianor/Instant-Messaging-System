@@ -1,0 +1,236 @@
+syntax = "proto3";
+
+package imserver;
+
+import "base.proto";
+
+option cc_generic_services = true;
+
+//-----------------------------------------
+// 昵称密码注册
+message UserNicknameRegisterRequest
+{
+    string request_id = 1;
+    string nickname = 2;
+    string password = 3;
+    string verification_code_id = 4;
+    string verification_code = 5;
+}
+
+message UserNicknameRegisterResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+
+// -----------------------------------------
+// 手机号验证码注册
+message UserPhoneRegisterRequest
+{
+    string request_id = 1;
+    string phone = 2;
+    string verification_code_id = 3;
+    string verification_code = 4;
+}
+
+message UserPhoneRegisterResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+// -----------------------------------------
+// 发送验证码
+message SendVerificationCodeRequest
+{
+    string request_id = 1;
+    string phone = 2;
+}
+
+message SendVerificationCodeResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string verification_code_id = 3; // 验证码ID
+    string error_message = 4;
+}
+
+// -----------------------------------------
+// 昵称密码登录
+message UserNicknameLoginRequest
+{
+    string request_id = 1;
+    string nickname = 2;
+    string password = 3;
+    string verification_code_id = 4;
+    string verification_code = 5;
+}
+
+message UserNicknameLoginResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string session_id = 3;
+    string error_message = 4;
+    
+}
+
+//-----------------------------------------
+// 手机号验证码登录
+message UserPhoneLoginRequest
+{
+    string request_id = 1;
+    string phone = 2;
+    string verification_code_id = 3;
+    string verification_code = 4;
+}
+
+message UserPhoneLoginResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string session_id = 3;
+    string error_message = 4;
+}
+
+
+//-----------------------------------------
+//个人信息获取
+message GetSingleUserInfoRequest
+{
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+}
+
+message GetSingleUserInfoResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    UserInfo user_info = 3;
+    string error_message = 4;
+}
+
+// -----------------------------------------
+// 获取取多个用户信息
+message GetMultiUserInfoRequest
+{
+    string request_id = 1;
+    repeated string user_id = 2;
+}
+
+message GetMultiUserInfoResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    map<string, UserInfo> user_info_map = 3; // key: user_id, value: UserInfo
+    string error_message = 4;
+}
+
+//-----------------------------------------
+// 修改昵称
+message SetUserNicknameRequest
+{
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+    string nickname = 4;
+}
+
+message SetUserNicknameResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+//-----------------------------------------
+// 修改密码
+message SetUserPasswordRequest
+{
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+    string old_password = 4;
+    string new_password = 5;
+}
+
+message SetUserPasswordResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+// -----------------------------------------
+// 修改手机号
+message SetUserPhoneRequest
+{
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+    string phone = 4;
+    string verification_code_id = 5;
+    string verification_code = 6;
+}
+
+message SetUserPhoneResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+// -----------------------------------------
+// 修改签名
+message SetUserDescriptionRequest
+{
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+    string description = 4;
+}
+
+message SetUserDescriptionResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+// -----------------------------------------
+// 修改头像
+message SetUserAvatarRequest
+{
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+    bytes avatar = 4; // 头像图片数据
+}
+
+message SetUserAvatarResponse
+{
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+}
+
+
+service UserService
+{
+    rpc UserNicknameRegister(UserNicknameRegisterRequest) returns (UserNicknameRegisterResponse);
+    rpc UserPhoneRegister(UserPhoneRegisterRequest) returns (UserPhoneRegisterResponse);
+    rpc SendVerificationCode(SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
+    rpc UserNicknameLogin(UserNicknameLoginRequest) returns (UserNicknameLoginResponse);
+    rpc UserPhoneLogin(UserPhoneLoginRequest) returns (UserPhoneLoginResponse);
+    rpc GetSingleUserInfo(GetSingleUserInfoRequest) returns (GetSingleUserInfoResponse);
+    rpc GetMultiUserInfo(GetMultiUserInfoRequest) returns (GetMultiUserInfoResponse);
+    rpc SetUserNickname(SetUserNicknameRequest) returns (SetUserNicknameResponse);
+    rpc SetUserPassword(SetUserPasswordRequest) returns (SetUserPasswordResponse);
+    rpc SetUserPhone(SetUserPhoneRequest) returns (SetUserPhoneResponse);
+    rpc SetUserDescription(SetUserDescriptionRequest) returns (SetUserDescriptionResponse);
+    rpc SetUserAvatar(SetUserAvatarRequest) returns (SetUserAvatarResponse);
+}

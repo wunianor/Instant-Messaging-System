@@ -11,7 +11,7 @@
 #include <net/if.h>
 #include <errno.h>
 
-#include "../third-party/log.hpp"
+#include "log.hpp"
 
 namespace imserver
 {
@@ -81,6 +81,23 @@ std::string uuid()
     static std::atomic<unsigned short> idx(0);
     unsigned short tmp = idx.fetch_add(1);
     ss << std::setw(4) << std::setfill('0') << std::hex << tmp;
+    return ss.str();
+}
+
+
+std::string vCode()
+{
+    std::random_device rd;//实例化设备随机数对象-用于生成设备随机数
+    std::mt19937 generator(rd());//以设备随机数为种子，实例化伪随机数对象
+    std::uniform_int_distribution<int> distribution(0,9); //限定数据范围
+
+    std::stringstream ss;
+
+    //1.生成6个1位(1字节)的随机数
+    for (int i = 0; i < 6; i++) 
+    {
+        ss << std::setw(1) << std::setfill('0') << std::dec << distribution(generator);
+    }
     return ss.str();
 }
 

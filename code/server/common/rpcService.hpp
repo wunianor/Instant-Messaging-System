@@ -122,6 +122,7 @@ public:
     /// @param serviceName 服务名称
     void followService(const std::string &serviceName)
     {
+        LOG_INFO("新增关心的服务:{}",serviceName);
         std::unique_lock<std::mutex> lock(_mutex);
         _followServices.insert(serviceName);
     }

@@ -34,10 +34,10 @@ int main(int argc,char **argv)
     initGlogger(FLAGS_isRelease,FLAGS_logFile,(spdlog::level::level_enum)FLAGS_logLevel);
 
     //创建并启动文件服务器
-    FileServerBuilder ssb;
-    ssb.makeRpcServer(FLAGS_instancePort,FLAGS_timeout_sec,FLAGS_num_threads,FLAGS_fileBaseDir);//其实这一步是真正的启动服务器
-    ssb.makeServiceRegisterObj(FLAGS_serviceRegistryAddr,FLAGS_ttl,FLAGS_baseDir+FLAGS_instanceName,FLAGS_instanceIp+":"+std::to_string(FLAGS_instancePort));
-    std::shared_ptr<FileServer> server=ssb.NewServer();
+    FileServerBuilder fsb;
+    fsb.makeRpcServer(FLAGS_instancePort,FLAGS_timeout_sec,FLAGS_num_threads,FLAGS_fileBaseDir);//其实这一步是真正的启动服务器
+    fsb.makeServiceRegisterObj(FLAGS_serviceRegistryAddr,FLAGS_ttl,FLAGS_baseDir+FLAGS_instanceName,FLAGS_instanceIp+":"+std::to_string(FLAGS_instancePort));
+    std::shared_ptr<FileServer> server=fsb.NewServer();
     server->start();
 
     return 0;

@@ -22,4 +22,14 @@ message FileUploadData {
     string file_name = 1;   //文件名称
     int64 file_size = 2;    //文件大小
     bytes file_content = 3; //文件数据
+    string file_id = 5;           //文件ID
+}
+
+message UserInfo
+{
+    string user_id = 1;
+    string nickname = 2;
+    string description = 3;
+    string phone = 4;
+    bytes avatar = 5; //头像图片
 }

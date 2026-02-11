@@ -40,7 +40,7 @@ public:
         std::string fileContent;
 
         //根据读取文件结果来填充响应
-        if(readFile(filePath,fileContent)==false)
+        if(!fileId.empty() && readFile(filePath,fileContent)==false)
         {
             //填充响应
             response->set_request_id(request->request_id());
@@ -74,7 +74,7 @@ public:
             const std::string filePath=_fileBaseDir+fileId;
             std::string fileContent;
 
-            if(readFile(filePath,fileContent)==false)
+            if(!fileId.empty() && readFile(filePath,fileContent)==false)
             {
                 response->set_request_id(request->request_id());
                 response->set_success(false);
@@ -103,7 +103,7 @@ public:
         //调用run()才表示服务器已经处理完该次响应
         brpc::ClosureGuard rpc_guard(done);
 
-        const std::string fileId=uuid();
+        const std::string fileId=request->file_data().file_id().empty()?uuid():request->file_data().file_id();
         const std::string filePath=_fileBaseDir+fileId;
 
         if(writeFile(filePath,request->file_data().file_content())==false)
@@ -135,7 +135,7 @@ public:
         for(int i=0;i<request->file_data_list_size();++i)
         {
             const auto &fileData=request->file_data_list(i);
-            const std::string fileId=uuid();
+            const std::string fileId=fileData.file_id().empty()?uuid():fileData.file_id();    
             const std::string filePath=_fileBaseDir+fileId;
 
             if(writeFile(filePath,fileData.file_content())==false)
