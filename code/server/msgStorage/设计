@@ -1,0 +1,55 @@
+我跟你说一下大该框架吧
+    客户端向网关服务器发起http请求,
+    网关服务器通过etcd注册中心查找可以提供对应的微服务的主机,
+    找到之后发起RPC调用并将结果通过http响应给客户端.
+    如果网关服务器需要推送消息给客户端,那么使用websocket进行推送
+
+整体使用的技术栈:
+    gflags,gtest,brpc,etcd,spdlog,rabbitMQ,mysql,redis,http,websocket,elasticsearch,语音识别SDK,短信发送SDK,docker
+
+大概有如下微服务:
+    1.语音识别微服务服务器:
+        (1).只提供一个rpc接口:通过百度语音识别SDK,将语音转为文字
+        (2).使用的技术栈:gflags,brpc,protobuf,spdlog,etcd,百度语音识别SDK
+    2.文件识别微服务服务器:
+        (1).提供4个rpc接口:下载/上传 单个/多个 文件;上传文件时会给文件生成唯一的uuid
+        (2).使用的技术栈:gflags,brpc,protobuf,spdlog,etcd
+    3.用户微服务服务器:
+        (1).提供rpc接口如下:手机验证码注册/登录,用户名密码注册/登录,发送验证码,设置用户昵称/头像/密码/签名/手机号
+        (2).使用mysql在user表存储用户相关数据,使用elasticsearch也存储用户数据(便于进行用户的查找),使用redis存储(用户客户端会话id->用户id),用户id(用于表示用户已经登录),验证码id->验证码;
+        (3).需要使用文件子服务,上传/下载头像文件
+        (4).使用的技术栈:gflags,brpc,protobuf,spdlog,etcd,elasticsearch,mysql(odb),redis
+    4.消息转发微服务服务器:
+        (1).只提供一个rpc接口:对于网关,返回消息需要转发的目标;对于内部,将消息序列化存储到rabbitMQ消息队列中,给文件存储子服务进行存储
+        (2).使用mysql在chat_session_member表内存储每个会话有哪些成员,使用rabbitMQ将消息发布到消息队列中
+        (3).需要使用用户子服务,获取用户信息
+        (4).使用的技术栈:gflags,brpc,protobuf,spdlog,etcd,rabbitMQ,mysql(odb)
+    5.消息存储微服务服务器:
+        (1).提供3个rpc接口:获取某个聊天会话的一段时间内的消息;获取某个聊天会话最近n条消息,根据关键字搜索消息
+        (2).还有一个rabbitMQ回调:将消息反序列化,如果是文本,存储到mysql表和elasticsearch(便于搜索)中,
+            如果是图片,语音,文件,则使用文件子服务进行存储,返回文件uuid后,再存储到mysql的message表内
+        (3).需要使用的子服务:文件子服务和用户子服务
+        (4).需要使用的mysql表:message表(存储消息类型)
+        (5).使用的技术栈:gflags,brpc,protobuf,spdlog,etcd,elasticsearch,mysql(odb)
+
+    6.好友管理微服务服务器:
+        (1).提供如下微服务:
+            service FriendService {
+            rpc GetFriendList(GetFriendListReq) returns (GetFriendListRsp);
+            rpc FriendRemove(FriendRemoveReq) returns (FriendRemoveRsp);
+            rpc FriendAdd(FriendAddReq) returns (FriendAddRsp);
+            rpc FriendAddProcess(FriendAddProcessReq) returns (FriendAddProcessRsp);
+            rpc FriendSearch(FriendSearchReq) returns (FriendSearchRsp);
+            rpc GetChatSessionList(GetChatSessionListReq) returns (GetChatSessionListRsp);
+            rpc ChatSessionCreate(ChatSessionCreateReq) returns (ChatSessionCreateRsp);
+            rpc GetChatSessionMember(GetChatSessionMemberReq) returns (GetChatSessionMemberRsp);
+            rpc GetPendingFriendEventList(GetPendingFriendEventListReq) returns (GetPendingFriendEventListRsp);
+        }
+        (2).需要使用的子服务:用户子服务,消息存储子服务
+        (3).需要使用的mysql表:chat-sesion表,chat-session-member表,好友申请持久化表,好友关系表
+        (4).使用的技术栈:gflags,brpc,protobuf,spdlog,etcd,elasticsearch,mysql(odb)
+
+    7.网关服务器:
+        主要是将客户端的http请求通过注册中心获取可以提供服务的服务器,然后通过rpc调用来从其他子服务器获取响应并返回给客户端
+        然后就是通过websocket长连接将消息/好友申请推送到客户端
+        并对客户端进行鉴权(即是否已经登录)
