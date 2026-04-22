@@ -1,0 +1,59 @@
+syntax = "proto3";
+package imserver;
+import "base.proto";
+
+option cc_generic_services = true;
+
+//获取一段时间内的消息
+message GetHistoryMessageRequest {
+    string request_id = 1;
+    string chat_session_id = 2;
+    int64 start_time = 3;
+    int64 over_time = 4;
+    string user_id = 5;
+    string session_id = 6;
+}
+message GetHistoryMessageResponse {
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3; 
+    repeated MessageInfo message_info = 4;
+}
+
+//获取最近的n条消息
+message GetRecentMessageRequest {
+    string request_id = 1;
+    string chat_session_id = 2;
+    int64 message_count = 3;
+    int64 cur_time = 4;//用于扩展获取指定时间前的n条消息
+    string user_id = 5;
+    string session_id = 6;
+}
+message GetRecentMessageResponse {
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3; 
+    repeated MessageInfo message_info = 4;
+}
+
+//消息搜索请求
+message MessageSearchRequest {
+    string request_id = 1;
+    string user_id = 2;
+    string session_id = 3;
+    string chat_session_id = 4;
+    string search_key = 5;
+}
+message MessageSearchResponse {
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3; 
+    repeated MessageInfo message_info = 4;
+}
+
+
+service MessageStorageService {
+    rpc GetHistoryMessage(GetHistoryMessageRequest) returns (GetHistoryMessageResponse);
+    rpc GetRecentMessage(GetRecentMessageRequest) returns (GetRecentMessageResponse);
+    rpc MessageSearch(MessageSearchRequest) returns (MessageSearchResponse);
+}

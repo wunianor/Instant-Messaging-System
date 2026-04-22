@@ -19,9 +19,9 @@ message FileDownloadData {
 }
 
 message FileUploadData {
-    string file_name = 1;   //文件名称
-    int64 file_size = 2;    //文件大小
-    bytes file_content = 3; //文件数据
+    string file_name = 1;         //文件名称
+    int64 file_size = 2;          //文件大小
+    bytes file_content = 3;       //文件数据
     string file_id = 5;           //文件ID
 }
 
@@ -32,4 +32,44 @@ message UserInfo
     string description = 3;
     string phone = 4;
     bytes avatar = 5; //头像图片
+}
+
+enum MessageType {
+    STRING = 0;
+    IMAGE = 1;
+    FILE = 2;
+    SPEECH = 3;
+}
+message StringMessageInfo {
+    string content = 1;//文字聊天内容
+}
+message ImageMessageInfo {
+    //图片文件id,客户端发送的时候不用设置，由transmit服务器进行设置后交给storage的时候设置
+    string file_id = 1;
+    //图片数据，在ES中存储消息的时候只要id不要文件数据, 服务端转发的时候需要原样转发
+    bytes image_content = 2;
+}
+message SpeechMessageInfo {
+    //语音文件id,客户端发送的时候不用设置
+    string file_id = 1;
+    //文件数据，在ES中存储消息的时候只要id不要文件数据, 服务端转发的时候也不需要填充
+    bytes file_contents = 2;
+}
+//消息内容
+message MessageContent {
+    MessageType message_type = 1; //消息类型
+    oneof msg_content {
+        StringMessageInfo string_message = 2;//文字消息
+        FileMessageInfo file_message = 3;//文件消息
+        SpeechMessageInfo speech_message = 4;//语音消息
+        ImageMessageInfo image_message = 5;//图片消息
+    };
+}
+//消息结构
+message MessageInfo {
+    string message_id = 1;//消息ID
+    string chat_session_id = 2;//消息所属聊天会话ID
+    int64 timestamp = 3;//消息产生时间
+    UserInfo sender = 4;//消息发送者信息
+    MessageContent message_content = 5; //消息内容
 }
