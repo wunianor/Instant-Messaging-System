@@ -1,4 +1,4 @@
-# Prerequisites
+# Prerequisites (gcc/clang dependency files)
 *.d
 
 # Compiled Object files
@@ -40,7 +40,18 @@
 # debug information files
 *.dwo
 
-
-#build,.vscode/文件夹
+# CMake：任意名为 build 的目录（含 code/server/*/build），以及常见带工具链后缀的构建目录
 build/
+cmake-build-*/
+
+# 编辑器 / IDE
 .vscode/
+.idea/
+
+# 文件服务默认落盘目录（userId 命名的上传文件），勿提交运行时数据
+/data/
+
+# 系统 / 杂项
+.DS_Store
+
+AI/
