@@ -949,7 +949,7 @@ private:
     /// @brief RPC服务管理器
     std::shared_ptr<RPCServiceManager> _rpcsm;
 
-    /// @brief 文件服务目录,格式例子:/service/file/
+    /// @brief 文件服务目录,格式例子:/service/file
     std::string _fileServiceDir;
 };
 

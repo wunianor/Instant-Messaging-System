@@ -56,7 +56,7 @@ target_link_libraries(${test_client} ${link_libs}) #链接库
 
 #设置头文件目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third-party/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common/)
 
 #安装目标文件
 INSTALL(TARGETS ${target} ${test_client} RUNTIME DESTINATION bin)

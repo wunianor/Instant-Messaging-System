@@ -16,11 +16,12 @@ set(target "userServer") #服务端
 set(test_client "test_client") #测试客户端
 
 #设置链接库
-set(link_libs -lbrpc -lgflags 
-    -lspdlog -lssl -lcrypto 
-    -lprotobuf -lleveldb -letcd-cpp-api 
+# elasticlient 依赖 /usr/local 下的 libjsoncpp.so.19；勿使用 -ljsoncpp（常解析为系统 libjsoncpp.so.1），否则 ld 报版本冲突
+set(link_libs -lbrpc -lgflags
+    -lspdlog -lssl -lcrypto
+    -lprotobuf -lleveldb -letcd-cpp-api
     -lcpprest -lcurl -lodb-mysql -lodb -lodb-boost
-    -ljsoncpp -lcpr -lelasticlient
+    -L/usr/local/lib -lcpr -lelasticlient -l:libjsoncpp.so.19
     -lhiredis -lredis++ -lpthread -ldl)
 
 set(proto_path ${CMAKE_CURRENT_SOURCE_DIR}/../proto) #proto文件路径
