@@ -7,7 +7,7 @@
 namespace imserver
 {
 
-//odb -d mysql --std c++11 --generate-query --generate-schema --profile boost/date-time .hxx文件路径
+//odb -d mysql --std c++17 --generate-query --generate-schema --profile boost/date-time .hxx文件路径
 #pragma db object table("user")
 class User
 {
@@ -16,19 +16,19 @@ public:
     User()=default;
 
     User(const std::string &userId,const std::string &nickname,const std::string &password):
-        _userId(userId),
+        _user_id(userId),
         _nickname(nickname),
         _password(password)
     {}
 
     User(const std::string &userId,const std::string &phone):
-        _userId(userId),
+        _user_id(userId),
         _nickname(userId),
         _phone(phone)
     {}
 
-    std::string userId() const {return _userId;}
-    void userId(const std::string &val) {_userId=val;}
+    std::string userId() const {return _user_id;}
+    void userId(const std::string &val) {_user_id=val;}
 
     std::string nickname() const
     {
@@ -60,10 +60,10 @@ public:
 
     std::string avatarId() const
     {
-        if(!_avatarId) return std::string();
-        return *_avatarId;
+        if(!_avatar_id) return std::string();
+        return *_avatar_id;
     }
-    void avatarId(const std::string &val) {_avatarId=val;}
+    void avatarId(const std::string &val) {_avatar_id=val;}
  
 
 private:
@@ -75,7 +75,7 @@ private:
 
     /// @brief 用户id
     #pragma db type("varchar(64)") index unique
-    std::string _userId;
+    std::string _user_id;
 
     /// @brief 用户昵称
     #pragma db type("varchar(64)") index unique
@@ -95,7 +95,7 @@ private:
 
     /// @brief 用户头像id
     #pragma db type("varchar(64)")
-    odb::nullable<std::string> _avatarId;
+    odb::nullable<std::string> _avatar_id;
 };
 
 
