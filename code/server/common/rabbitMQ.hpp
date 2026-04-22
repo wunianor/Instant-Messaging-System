@@ -67,12 +67,12 @@ public:
     {
         //声明交换机
         _channel.declareExchange(exchangeName,exchangeType)
-            .onError([&exchangeName](const char *message)
+            .onError([exchangeName](const char *message)
             {
                 LOG_ERROR("声明{}失败:{}",exchangeName,message);
                 exit(-1);
             })
-            .onSuccess([&exchangeName]()
+            .onSuccess([exchangeName]()
             {
                 LOG_INFO("声明{}成功",exchangeName);
             });
@@ -80,24 +80,24 @@ public:
         
         //声明队列
         _channel.declareQueue(queueName)
-            .onError([&queueName](const char *message)
+            .onError([queueName](const char *message)
             {
                 LOG_ERROR("声明{}失败:{}",queueName,message);
                 exit(-1);
             })
-            .onSuccess([&queueName]()
+            .onSuccess([queueName]()
             {
                 LOG_INFO("声明{}成功",queueName);
             });
 
         //将队列与交换机绑定
         _channel.bindQueue(exchangeName,queueName,routingKey)
-            .onError([&exchangeName,&queueName](const char *message)
+            .onError([exchangeName,queueName](const char *message)
             {
                 LOG_ERROR("{}绑定{}失败:{}",exchangeName,queueName,message);
                 exit(-1);
             })
-            .onSuccess([&exchangeName,&queueName]()
+            .onSuccess([exchangeName,queueName]()
             {
                 LOG_INFO("{}绑定{}成功",exchangeName,queueName);
             });
@@ -126,7 +126,7 @@ public:
     void consume(const std::string &queueName,const MessageCallback_t &cb)
     {
         _channel.consume(queueName)
-            .onReceived([this,&cb](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered)
+            .onReceived([this,cb](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered)
             {
                 //处理消息
                 cb(message.body(),message.bodySize());
@@ -134,7 +134,7 @@ public:
                 //确认已经收到该消息
                 _channel.ack(deliveryTag);
             })
-            .onError([&queueName](const char *message)
+            .onError([queueName](const char *message)
             {
                 LOG_ERROR("{} consume 失败:{}",queueName,message);
                 exit(-1);

@@ -12,7 +12,7 @@
 #include <odb/mysql/database.hxx> // MySQL数据库的具体实现
 #include <odb/mysql/transaction.hxx> // MySQL事务兼容具体实现
 #include "../odb/user.hxx"
-#include "../odb/testUser/user-odb.hxx"
+#include "user-odb.hxx"
 #include "log.hpp"
 
 namespace imserver
@@ -78,7 +78,7 @@ public:
         std::shared_ptr<User> ret;
         try {
             odb::transaction trans(_db->begin());
-            ret.reset(_db->query_one<User>(odb::query<User>::userId == userId));
+            ret.reset(_db->query_one<User>(odb::query<User>::user_id == userId));
             trans.commit();
         } catch (const std::exception &e) {
             LOG_ERROR("使用用户id查询用户失败,userId:{},错误信息:{}",userId,e.what());
@@ -125,7 +125,7 @@ public:
 
             //组织查询表达式
             std::ostringstream oss;
-            oss<<"userId in (";
+            oss << "user_id in (";
             for(const auto &userId:userIds)
             {   
                 oss<<"'"<< userId<<"',";
